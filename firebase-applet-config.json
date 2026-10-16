@@ -1,0 +1,12 @@
+{
+  "projectId": "greeterproject",
+  "appId": "1:745708460592:web:c6f2f429c07ca2600b6bf5",
+  "apiKey": "AIzaSyC96EvXHNJoks6fpkIcyV3xVaHpZQhMkX8",
+  "authDomain": "greeterproject.firebaseapp.com",
+  "firestoreDatabaseId": "ai-studio-remixreservasi-cc6b0faa-a72f-45ff-8233-9999337191af",
+  "storageBucket": "greeterproject.firebasestorage.app",
+  "messagingSenderId": "745708460592",
+  "measurementId": "",
+  "oAuthClientId": "745708460592-i57rg1gne39d7ustu3diq9pkjgtqifmp.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
+}

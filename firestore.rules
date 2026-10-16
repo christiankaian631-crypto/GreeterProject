@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        ((exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Restaurant Manager') ||
+          ((request.auth.token.email == "steakhousethebarn@gmail.com" || 
+            request.auth.token.email == "christiankaian631@gmail.com" ||
+            request.auth.token.email == "christiankaian666@gmail.com") && 
+           request.auth.token.email_verified == true));
+    }
+
+    function isValidReservation(data) {
+      return data.id is string &&
+             data.reservationDate is string &&
+             data.guestName is string &&
+             data.guestCount is number &&
+             data.status is string &&
+             data.createdAt is number;
+    }
+
+    function isValidWaitingListEntry(data) {
+      return data.id is string &&
+             data.guestName is string &&
+             data.guestCount is number &&
+             data.joinedAt is number &&
+             data.status is string &&
+             data.reservationDate is string;
+    }
+
+    function isValidAppSettings(data) {
+      return data.totalTables is number &&
+             data.zones is list &&
+             data.condimentGroups is list &&
+             data.categoryMappings is list &&
+             data.customMenu is list &&
+             data.soldOutItems is list &&
+             data.theme is map;
+    }
+
+    function isValidUser(data) {
+      return data.name is string &&
+             data.role is string &&
+             data.allowedOutlet is string;
+    }
+
+    function isValidChatMessage(data) {
+      return data.senderName is string &&
+             data.text is string &&
+             data.outletId is string;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    match /outlets/{outletId}/settings/current {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidAppSettings(request.resource.data);
+    }
+
+    match /outlets/{outletId}/reservations/{reservationId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidReservation(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    match /outlets/{outletId}/waitingList/{waitingListId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidWaitingListEntry(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    match /outlets/{outletId}/history/{historyId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidReservation(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+
+    match /chats/{messageId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidChatMessage(request.resource.data);
+    }
+  }
+}

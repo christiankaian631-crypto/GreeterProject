@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a staff member or manager.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name of the user." },
+        "role": { "type": "string", "description": "User role (e.g., Manager, Greeter)." },
+        "title": { "type": "string", "description": "Job title." },
+        "allowedOutlet": { "type": "string", "description": "Outlet the user can access." }
+      },
+      "required": ["name", "role", "allowedOutlet"]
+    },
+    "AppSettings": {
+      "title": "AppSettings",
+      "description": "Global application settings.",
+      "type": "object",
+      "properties": {
+        "totalTables": { "type": "integer" },
+        "zones": { "type": "array" },
+        "condimentGroups": { "type": "array" },
+        "categoryMappings": { "type": "array" },
+        "customMenu": { "type": "array" },
+        "soldOutItems": { "type": "array" },
+        "theme": { "type": "object" },
+        "menuPriceOverrides": { "type": "object" }
+      }
+    },
+    "Reservation": {
+      "title": "Reservation",
+      "description": "A guest reservation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationDate": { "type": "string" },
+        "guestName": { "type": "string" },
+        "guestCount": { "type": "integer" },
+        "arrivalTime": { "type": "string" },
+        "shift": { "type": "string" },
+        "locationPreference": { "type": "string" },
+        "tableNumber": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "integer" },
+        "checkedInAt": { "type": "integer" },
+        "completedAt": { "type": "integer" }
+      },
+      "required": ["id", "reservationDate", "guestName", "guestCount", "status", "createdAt"]
+    },
+    "WaitingListEntry": {
+      "title": "WaitingListEntry",
+      "description": "A guest on the waiting list.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "guestName": { "type": "string" },
+        "guestCount": { "type": "integer" },
+        "joinedAt": { "type": "integer" },
+        "status": { "type": "string" },
+        "reservationDate": { "type": "string" }
+      },
+      "required": ["id", "guestName", "guestCount", "joinedAt", "status", "reservationDate"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderRole": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "integer" },
+        "outletId": { "type": "string" }
+      },
+      "required": ["id", "senderName", "text", "timestamp", "outletId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles."
+    },
+    "/outlets/{outletId}/settings/current": {
+      "schema": "AppSettings",
+      "description": "Configuration settings for a specific outlet."
+    },
+    "/outlets/{outletId}/reservations/{reservationId}": {
+      "schema": "Reservation",
+      "description": "Reservations for a specific outlet."
+    },
+    "/outlets/{outletId}/waitingList/{waitingListId}": {
+      "schema": "WaitingListEntry",
+      "description": "Waiting list for a specific outlet."
+    },
+    "/outlets/{outletId}/history/{historyId}": {
+      "schema": "Reservation",
+      "description": "Archived reservations."
+    },
+    "/chats/{messageId}": {
+      "schema": "Message",
+      "description": "Global chat messages across all outlets."
+    }
+  }
+}

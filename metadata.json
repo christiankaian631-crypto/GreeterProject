@@ -1,0 +1,8 @@
+{
+  "name": "Remix RESERVASI",
+  "description": "Smart daily reservation management system for Justus Steakhouse - The Barn BSD City. Features automated bill tracking and digital floor management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
